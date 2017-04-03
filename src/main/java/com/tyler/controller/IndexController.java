@@ -17,14 +17,14 @@ import java.util.*;
 /**
  * Created by tyler on 2017/4/2.
  */
-//@Controller
+@Controller
 public class IndexController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IndexController.class);
-    @RequestMapping("/")
+    @RequestMapping("/sss")
     @ResponseBody
-    public String index(){
+    public String index(@RequestParam("username")String username){
         logger.info("Visit Index");
-        return "Hello World"+"<br>";
+        return "Hello World"+"<br>"+username;
     }
     @RequestMapping("/news")
     public String news(ModelMap modelMap){

@@ -5,19 +5,12 @@
     <title>头条资讯</title>
     <meta name="viewport"
           content="width=device-width, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="keywords" content="读《Web 全栈工程师的自我修养》">
-    <meta name="description" content="阅读影浅分享的读《Web 全栈工程师的自我修养》，就在牛客网。">
 
     <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/styles/font-awesome.min.css">
 
     <link rel="stylesheet" media="all" href="/styles/style.css">
 
-    <script src="/scripts/hm.js"></script>
-    <script src="/scripts/detail.js"></script>
-
-    <script type="text/javascript" src="/scripts/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/scripts/jquery.qrcode.min.js"></script>
 </head>
 <body class="welcome_index">
 
@@ -43,13 +36,18 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class=""><a href="http://nowcoder.com/explore">发现</a></li>
 
-                <li><a href="http://nowcoder.com/signin">站内信</a></li>
-                <li class=""><a href="http://nowcoder.com/about">登陆</a></li>
+                <#if user??>
+                    <li class="js-login"><a href="/logout">${user.name}</a></li>
+                <#else>
+                    <li class="js-login"><a href="javascript:void(0);">登陆</a></li>
+                </#if>
+
             </ul>
 
         </nav>
     </div>
 </header>
+
 
 <div id="main">
 
@@ -113,52 +111,6 @@
     </div>
 </div>
 
-</div>
-
-<footer>
-    <div class="container">
-        <p class="text-center">
-            <a href="http://nowcoder.com/about">关于我们</a>
-            <a href="http://nowcoder.com/download">头条客户端</a>
-        </p>
-        <p class="text-center">© 2013-2016 头条八卦</p>
-    </div>
-
-</footer>
-
-<div id="quick-download">
-    <button type="button" class="close-link btn-link" data-toggle="modal" data-target="#quick-download-app-modal"><i
-            class="fa icon-times-circle"></i></button>
-
-    <a class="download-link" href="http://nowcoder.com/download">
-        <h3>牛客网</h3>
-        <h4>程序员的首选学习分享平台</h4>
-        <button type="button" class="btn btn-info btn-sm">下载 APP</button>
-    </a>
-
-    <div class="modal fade" id="quick-download-app-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">提示</div>
-                <div class="modal-body">
-                    <div class="checkbox">
-                        <label class="i-checks">
-                            <input id="already-installed" type="checkbox"><i></i> 我已安装了牛客网App，不再显示
-                        </label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-block btn-default" id="close-quick-download-app-modal">关 闭
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-</script>
-
-
+<#include "footer.html">
 </body>
 </html>
