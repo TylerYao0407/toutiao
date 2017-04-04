@@ -1,26 +1,27 @@
 package com.tyler.controller;
 
-import com.tyler.model.HostHolder;
-import com.tyler.model.News;
+import com.tyler.model.*;
+import com.tyler.service.CommentService;
 import com.tyler.service.NewsService;
 import com.tyler.service.QiniuService;
+import com.tyler.service.UserService;
 import com.tyler.util.ToutiaoUtil;
 import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by tyler on 2017/4/4.
@@ -29,11 +30,15 @@ import java.util.Date;
 public class NewsController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
+    private UserService userService;
+    @Autowired
     private NewsService newsService;
     @Autowired
     private QiniuService qiniuService;
     @Autowired
     private HostHolder hostHolder;
+    @Autowired
+    private CommentService commentService;
     @RequestMapping(value = "/uploadImage/", method = RequestMethod.POST)
     @ResponseBody
     public String uploadImage(@RequestParam("file") MultipartFile file){
@@ -84,6 +89,61 @@ public class NewsController {
             logger.error("添加资讯出错"+e.getMessage());
             return ToutiaoUtil.getJSONString(1, "发布失败");
         }
+    }
+    @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
+    public String detail(@PathVariable("newsId") int newsId, Model model){
+        try {
+            News news = newsService.getById(newsId);
+            if(news != null){
+                List<Comment> comments = commentService.selectByEntity(newsId, EntityType.ENTITY_NEWS);
+                List<ViewObject> commentVOs = new ArrayList<>();
+                for(Comment comment : comments){
+                    ViewObject vo = new ViewObject();
+                    vo.set("comment",comment);
+                    vo.set("user",userService.getUserById(comment.getUserId()));
+                    commentVOs.add(vo);
+                }
+                model.addAttribute("comments",commentVOs);
+            }
+            model.addAttribute("news",news);
+            model.addAttribute("owner",userService.getUserById(news.getUserId()));
+            model.addAttribute("localUserId",hostHolder.getUser().getId());
+        } catch (Exception e) {
+            logger.error("获取资讯明细错误" + e.getMessage());
+        }
+        return "detail";
+    }
+    @RequestMapping(value = "/addComment", method = RequestMethod.POST)
+    public String addComment(@RequestParam("newsId") int newsId,
+                             @RequestParam("content") String content){
 
+        try {
+            Comment comment = new Comment();
+            comment.setEntityId(newsId);
+            comment.setEntityType(EntityType.ENTITY_NEWS);
+            comment.setContent(content);
+            comment.setUserId(hostHolder.getUser().getId());
+            comment.setCreatedDate(new Date());
+            comment.setStatus(0);
+
+            commentService.addComment(comment);
+
+            //更新评论数量
+            int count = commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
+            newsService.updateCommentCount(comment.getEntityId(),count);
+        } catch (Exception e) {
+            logger.error("提交评论错误" + e.getMessage());
+        }
+        return "redirect:/news/"+String.valueOf(newsId);
+    }
+    @RequestMapping(value = "/deleteComment", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteComment(@RequestParam("commentId") int commentId,@RequestParam("newsId") int newsId){
+       if(commentId>0){
+           commentService.deleteComment(commentId);
+       }
+        int count = commentService.getCommentCount(newsId,EntityType.ENTITY_NEWS);
+        newsService.updateCommentCount(newsId,count);
+       return ToutiaoUtil.getJSONString(0);
     }
 }

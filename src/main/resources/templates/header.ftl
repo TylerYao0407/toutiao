@@ -48,9 +48,10 @@
                 <#if user??>
                     <li class="js-share"><a href="javascript:void(0);">分享</a></li>
                     <li class=""><a href="/msg/list">站内信</a></li>
-                    <li><a href="/logout">${user.name}</a></li>
+                    <li><a href="#">${user.name}</a></li>
+                    <li><a href="/logout">注销</a></li>
                     <#else>
-                        <li class="js-login"><a href="javascript:void(0);">登陆</a></li>
+                        <li class="js-login"><a href="javascript:void(0);">注册/登陆</a></li>
                 </#if>
             </ul>
 

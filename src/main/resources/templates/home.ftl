@@ -31,11 +31,11 @@
                 </div>
                 <div class="content" data-url="${vo.news.link}">
                     <div>
-                        <img class="content-img" src="${vo.news.image}" alt="">
+                        <a target="_blank" href="/news/${vo.news.id}"><img class="content-img" src="${vo.news.image}" alt="图片丢啦"></a>
                     </div>
                     <div class="content-main">
                         <h3 class="title">
-                            <a target="_blank" rel="external nofollow" href="${vo.news.link}">${vo.news.title}</a>
+                            <a target="_blank" rel="external nofollow" href="/news/${vo.news.id}">${vo.news.title}</a>
                         </h3>
                         <div class="meta">
                         ${vo.news.link}
