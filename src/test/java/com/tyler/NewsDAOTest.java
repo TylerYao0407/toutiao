@@ -25,7 +25,7 @@ public class NewsDAOTest {
     public void insertNews(){
         for(int i = 0;i<10;i++){
             Date date = new Date();
-            date.setTime(date.getTime() + 1000*3600*5*i);
+            date.setTime(date.getTime() - 1000*3600*5*i);
             News news = new News();
             news.setTitle(String.format("TITLE%d",i));
             news.setImage("http://lorempixel.com/300/300/");

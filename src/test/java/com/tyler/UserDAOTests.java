@@ -13,7 +13,7 @@ import java.util.Random;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Sql("/init-schema.sql")
+//@Sql("/init-schema.sql")
 public class UserDAOTests {
 	@Autowired
 	private UserDAO userDAO;

@@ -1,53 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>头条资讯</title>
-    <meta name="viewport"
-          content="width=device-width, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
-    <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/styles/font-awesome.min.css">
-
-    <link rel="stylesheet" media="all" href="/styles/style.css">
-
-</head>
-<body class="welcome_index">
-
-<header class="navbar navbar-default navbar-static-top bs-docs-nav" id="top" role="banner">
-    <div class="container">
-        <div class="navbar-header">
-            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                    data-target=".bs-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-            <a href="http://nowcoder.com/" class="navbar-brand logo">
-                <h1>头条资讯</h1>
-                <h3>你关心的才是头条</h3>
-            </a>
-        </div>
-
-        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class=""><a href="http://nowcoder.com/explore">发现</a></li>
-
-                <#if user??>
-                    <li class="js-login"><a href="/logout">${user.name}</a></li>
-                <#else>
-                    <li class="js-login"><a href="javascript:void(0);">登陆</a></li>
-                </#if>
-
-            </ul>
-
-        </nav>
-    </div>
-</header>
-
+<#include "header.ftl">
 
 <div id="main">
 
@@ -110,7 +61,7 @@
         </div>
     </div>
 </div>
-
-<#include "footer.html">
-</body>
-</html>
+<#if pop??>
+<script>window.loginpop = $!{pop};</script>
+</#if>
+<#include "footer.ftl">
